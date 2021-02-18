@@ -323,6 +323,15 @@ namespace OpenZWave
 							}
 						}
 					}
+					// Add manufacturer specific mode if non existing. Most valves don't report this, but do support this (CC v3).
+					if (m_supportedModes.back().m_value < 31 && GetVersion() > 2) {
+						Internal::VC::ValueList::Item item;
+						item.m_value = 31;
+						item.m_label = c_modeName[item.m_value];
+						m_supportedModes.push_back(item);
+						Log::Write(LogLevel_Info, GetNodeId(), "    Added mode: %s", c_modeName[item.m_value]);
+					}
+					
 					/* at this stage, we don't know the Actual Mode of the Fan, so set it to the lowest 
 					 * value... If not, set to 0, which possibly could be invalid... 
 					 */
