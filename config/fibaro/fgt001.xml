@@ -64,12 +64,12 @@ Main features:
     <Value genre="user" index="0" instance="1" label="Mode" max="255" min="0" read_only="false" type="list" units="" value="0" write_only="false">
       <Item label="Off" value="0"/>
       <Item label="Heat" value="1"/>
-      <Item label="Manual Valve Control" value="31"/>
+      <Item label="Manufacturer Specific" value="31"/>
     </Value>
     <SupportedModes>
       <Mode index="0" label="Off"/>
       <Mode index="1" label="Heat"/>
-      <Mode index="31" label="Manual Valve Control"/>
+      <Mode index="31" label="Manufacturer Specific"/>
     </SupportedModes>
     <Compatibility/>
   </CommandClass>
