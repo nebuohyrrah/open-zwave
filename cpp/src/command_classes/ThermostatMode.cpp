@@ -324,7 +324,7 @@ namespace OpenZWave
 						}
 					}
 					// Add manufacturer specific mode if non existing. Most valves don't report this, but do support this (CC v3).
-					if (m_supportedModes.back().m_value < 31 && GetVersion() > 2) {
+					if (m_supportedModes.back().m_value < 31 && GetVersion() >= 3) {
 						Internal::VC::ValueList::Item item;
 						item.m_value = 31;
 						item.m_label = c_modeName[item.m_value];
