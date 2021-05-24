@@ -48,12 +48,12 @@ namespace OpenZWave
 
 				if (m_sessions.size() >= 6)
 				{
-					// Clean up oldest session, we support max 6 simultaneous sessions per node 
+					// Clean up oldest session, we support max 6 simultaneous sessions per node
 					m_sessions.pop_front();
 				}
 
 				m_sessions.push_back({
-					.session_id = m_last_session_id, 
+					.session_id = m_last_session_id,
 					.command_class_id = _command_class_id,
 					.index = _index
 				});
@@ -63,14 +63,14 @@ namespace OpenZWave
 
 			uint32 Supervision::GetSupervisionIndex(uint8 _session_id)
 			{
-				for (auto it = m_sessions.cbegin(); it != m_sessions.cend(); ++it) 
+				for (auto it = m_sessions.cbegin(); it != m_sessions.cend(); ++it)
 				{
-					if (it->session_id == _session_id) 
+					if (it->session_id == _session_id)
 					{
 						return it->index;
 					}
 				}
-			
+
 				return StaticNoIndex();
 			}
 
@@ -82,7 +82,7 @@ namespace OpenZWave
 			{
 				if (Node* node = GetNodeUnsafe())
 				{
-					if (_length >= 4) 
+					if (_length >= 4)
 					{
 						uint8 more_status_updates = _data[1] >> 7;
 						uint8 session_id = _data[1] & 0x3f;
@@ -98,15 +98,15 @@ namespace OpenZWave
 						default: status_identifier = "UNKNOWN"; break;
 						}
 
-						for (auto it = m_sessions.cbegin(); it != m_sessions.cend(); ++it) 
+						for (auto it = m_sessions.cbegin(); it != m_sessions.cend(); ++it)
 						{
-							if (it->session_id == session_id) 
+							if (it->session_id == session_id)
 							{
 								if (CommandClass* pCommandClass = node->GetCommandClass(it->command_class_id))
 								{
 									Log::Write(LogLevel_Info, GetNodeId(), "Received SupervisionReport: session %d, %s index %d, status %s, duration %d sec, more status updates %d",
-										session_id, 
-										pCommandClass->GetCommandClassName().c_str(), it->index, 
+										session_id,
+										pCommandClass->GetCommandClassName().c_str(), it->index,
 										status_identifier, decodeDuration(duration), more_status_updates);
 
 									if (status == SupervisionStatus::SupervisionStatus_Success)
@@ -114,18 +114,17 @@ namespace OpenZWave
 										pCommandClass->SupervisionSessionSuccess(session_id, _instance);
 									}
 								}
-							}
-
 							if (more_status_updates == 0)
 							{
 								m_sessions.erase(it);
 							}
-							
+
 							return;
+							}
 						}
 
 						Log::Write(LogLevel_Warning, GetNodeId(), "Received SupervisionReport: unknown session %d, status %s, duration %d sec, more status updates %d",
-							session_id, 
+							session_id,
 							status_identifier, decodeDuration(duration), more_status_updates);
 					}
 				}
